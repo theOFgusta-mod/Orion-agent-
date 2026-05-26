@@ -159,6 +159,7 @@ if command -v node &>/dev/null && command -v npm &>/dev/null; then
 fi
 
 # ── Config padrão ──
+mkdir -p config  # Garante que o diretório existe
 if [ ! -f "config/config.yaml" ]; then
     echo -e "${YELLOW}📝${NC} Criando config.yaml padrão..."
     cat > config/config.yaml << 'EOF'

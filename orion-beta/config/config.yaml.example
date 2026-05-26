@@ -1,0 +1,56 @@
+# ═══════════════════════════════════════════
+# O.R.I.O.N 3.0 — Configuração
+# ═══════════════════════════════════════════
+
+orion:
+  name: "O.R.I.O.N"
+  version: "3.0.0-beta"
+  dono: "Gustavo"            # Seu nome
+  lingua: "pt-BR"            # Idioma padrão
+  prefixo: "orion,"          # Prefixo pra comandos
+
+# ── Plataformas (ativar/desativar) ──
+plataformas:
+  telegram:
+    ativo: true
+    token: ""                # Bot token do @BotFather
+    admins: []               # IDs dos admins
+
+  whatsapp:
+    ativo: true
+    session_dir: "sessions/whatsapp"
+    webhook_port: 8888
+
+  email:
+    ativo: false             # EM DESENVOLVIMENTO
+    user: ""                 # Seu e-mail
+    password: ""             # Senha ou App Password
+    imap_host: "imap.gmail.com"
+    imap_port: 993
+    smtp_host: "smtp.gmail.com"
+    smtp_port: 587
+    poll_interval: 60        # Segundos entre verificações
+    auto_reply: false        # Responder automaticamente?
+    max_emails: 5            # Máx por verificação
+    default_subject: "Mensagem do O.R.I.O.N Beta"
+
+  spotify:
+    ativo: true
+    client_id: ""            # Spotify Developer ID
+    client_secret: ""        # Spotify Developer Secret
+    redirect_uri: "http://localhost:8888/callback"
+
+# ── IA ──
+ia:
+  provedor: "gemini"         # gemini | openai
+  gemini:
+    api_key: ""              # Google AI API Key
+    modelo: "gemini-2.0-flash"
+  openai:
+    api_key: ""              # OpenAI API Key
+    modelo: "gpt-4o"
+
+# ── Memória ──
+memoria:
+  tipo: "sqlite"             # sqlite | json
+  arquivo: "data/memoria.db"
