@@ -75,7 +75,14 @@ class Orion:
             if spot_cmd:
                 return spot_cmd
 
-        # 3. Resposta da IA
+        # 3. Tenta comando de E-mail
+        email = self.bridges.get("email")
+        if email:
+            email_cmd = email.process_command(mensagem)
+            if email_cmd:
+                return email_cmd
+
+        # 4. Resposta da IA
         return self.ai.responder(plataforma, usuario_id, usuario_nome, mensagem)
 
     async def iniciar(self):
@@ -105,6 +112,12 @@ class Orion:
         whatsapp = WhatsAppBridge(self.config, self.responder)
         self.bridges["whatsapp"] = whatsapp
 
+        # ── E-mail ──
+        from bridges.email import EmailBridge
+
+        email = EmailBridge(self.config, self.responder)
+        self.bridges["email"] = email
+
         # ── Inicia bridges concorrentes ──
         tasks = []
         if self.config.get("plataformas", {}).get("telegram", {}).get("token"):
@@ -115,6 +128,12 @@ class Orion:
 
         if self.config.get("plataformas", {}).get("whatsapp", {}).get("enabled", False):
             tasks.append(asyncio.create_task(whatsapp.start()))
+
+        # ── E-mail ──
+        email_cfg = self.config.get("plataformas", {}).get("email", {})
+        if email_cfg.get("ativo", False) or email_cfg.get("enabled", False):
+            logger.info("📧 E-mail habilitado")
+            tasks.append(asyncio.create_task(email.start()))
 
         # ── CLI interativa (fallback) ──
         if not tasks:
@@ -130,8 +149,9 @@ class Orion:
         """Modo terminal interativo"""
         print(f"\n{'='*54}")
         print(f"  🤖 {self.config['orion']['nome']} 3.0")
-        print(f"  🧪 BETA — WhatsApp e Telegram em desenvolvimento")
+        print(f"  🧪 BETA — Multi-plataforma em desenvolvimento")
         print(f"  {'─'*50}")
+        print(f"  Plataformas: Telegram 🧪 | WhatsApp 🧪 | E-mail 📧 | Spotify 🎵")
         print(f"  Comandos: memorize | lembre de | status | ajuda")
         print(f"  Digite 'sair' ou Ctrl+C para encerrar")
         print(f"{'='*54}\n")

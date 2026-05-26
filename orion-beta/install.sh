@@ -192,6 +192,17 @@ plataformas:
     enabled: false             # EM DESENVOLVIMENTO — Requer Node.js
     webhook_port: 8888
     session_dir: "sessions/whatsapp"
+  email:
+    enabled: false             # EM DESENVOLVIMENTO
+    user: ""                   # Seu e-mail
+    password: ""               # Senha ou App Password
+    imap_host: "imap.gmail.com"
+    smtp_host: "smtp.gmail.com"
+    poll_interval: 60
+    auto_reply: false
+    max_emails: 5
+    default_subject: "Mensagem do O.R.I.O.N Beta"
+
   spotify:
     enabled: false
     client_id: ""              # https://developer.spotify.com
