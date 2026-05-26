@@ -76,7 +76,7 @@ if [ ! -d "${ORION_DEV}" ]; then
   echo -e "${VERMELHO}❌ O.R.I.O.N não está instalado.${NC}"
   echo ""
   echo "Instale com:"
-  echo -e "  ${CIANO}curl -fsSL https://raw.githubusercontent.com/gustavoolivera/orion-dev/main/scripts/orion-install.sh | bash${NC}"
+  echo -e "  ${CIANO}curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/scripts/orion-install.sh | bash${NC}"
   echo ""
   exit 1
 fi

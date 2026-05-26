@@ -14,7 +14,7 @@ CIANO='\033[0;36m'
 NC='\033[0m'
 
 # ---- Configurações ----
-REPO_URL="https://github.com/gustavoolivera/orion-dev.git"
+REPO_URL="https://github.com/theOFgusta-mod/Orion-agent-.git"
 ORION_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/orion"
 ORION_REPO="${ORION_HOME}/repo"
 ORION_BIN="${HOME}/.local/bin/orion"

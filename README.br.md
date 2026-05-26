@@ -30,6 +30,38 @@
 
 ---
 
+## 🚀 Instalação (uma linha)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/scripts/orion-install.sh | bash
+```
+
+Depois é só digitar no terminal:
+
+```bash
+orion
+```
+
+Para atualizar depois:
+
+```bash
+orion update
+```
+
+### Manual
+
+```bash
+git clone https://github.com/theOFgusta-mod/Orion-agent-.git
+cd Orion-agent-
+bun install
+cd packages/opencode
+bun run --conditions=browser src/index.ts
+```
+
+> **Pré-requisitos:** Git, [Bun](https://bun.sh) ≥ 1.3.14
+
+---
+
 ## ⚡ Sobre
 
 **O.R.I.O.N** é um fork do [OpenCode](https://opencode.ai) com personalidade própria. Um agente de IA pra rodar no terminal, mas com a cara do dono.
