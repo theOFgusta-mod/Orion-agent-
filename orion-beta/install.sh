@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # ══════════════════════════════════════════════════════════
-#  O.R.I.O.N Beta — Instalador Automático
-#  WhatsApp + Telegram + Spotify + IA
+#  O.R.I.O.N Beta — Instalador Automático v3.1
+#  WhatsApp + Telegram + Spotify + IA + E-mail
 #  Uso: curl -fsSL https://raw.githubusercontent.com/... | bash
+#  ⚡ Sem pip global! Usa venv com pip embutido.
 # ══════════════════════════════════════════════════════════
 
 set -e
