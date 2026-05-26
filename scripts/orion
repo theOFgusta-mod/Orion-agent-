@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# -------------------------------------------------------------------
+# O.R.I.O.N — Organized Responsive Intelligent Operational Navigator
+# Comando global para iniciar o assistente de terminal
+# -------------------------------------------------------------------
+set -euo pipefail
+
+# Caminho de desenvolvimento (sobrescreve com env var)
+if [ -n "${ORION_DEV_DIR:-}" ]; then
+  ORION_REPO="${ORION_DEV_DIR}"
+  ORION_HOME="${ORION_DEV_DIR}"
+else
+  ORION_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/orion"
+  ORION_REPO="${ORION_HOME}/repo"
+fi
+ORION_DEV="${ORION_REPO}/packages/opencode"
+
+# ---- Cores ----
+VERDE='\033[0;32m'
+VERMELHO='\033[0;31m'
+LARANJA='\033[38;5;214m'
+CIANO='\033[0;36m'
+NC='\033[0m'
+
+banner() {
+  echo -e "${VERDE}"
+  echo "  █████╗      ██████╗      ██╗           █████╗      ███╗   ██╗"
+  echo " ██╔══██╗     ██╔══██╗     ██║          ██╔══██╗     ████╗  ██║"
+  echo " ██║  ██║     ██████╔╝     ██║          ██║  ██║     ██╔██╗ ██║"
+  echo " ██║  ██║     ██╔══██╗     ██║          ██║  ██║     ██║╚██╗██║"
+  echo " ╚█████╔╝     ██║  ██║     ██║          ╚█████╔╝     ██║ ╚████║"
+  echo "  ╚════╝      ╚═╝  ╚═╝     ╚═╝           ╚════╝      ╚═╝  ╚═══╝"
+  echo -e "${NC}"
+}
+
+help() {
+  banner
+  echo -e "${CIANO}O.R.I.O.N — Assistente de terminal com personalidade${NC}"
+  echo ""
+  echo "Uso: orion [comando]"
+  echo ""
+  echo "Comandos:"
+  echo "  (sem argumentos)  Inicia o TUI do O.R.I.O.N"
+  echo "  update            Atualiza o O.R.I.O.N para a versão mais recente"
+  echo "  seed              Popula memórias do ~/memoria.md para o banco"
+  echo "  help              Mostra esta ajuda"
+  echo ""
+  echo "Exemplos:"
+  echo "  orion             Abre o assistente"
+  echo "  orion update      Baixa atualizações"
+  echo ""
+}
+
+update() {
+  echo -e "${LARANJA}🔄 Atualizando O.R.I.O.N...${NC}"
+  cd "${ORION_REPO}" || { echo -e "${VERMELHO}❌ Repositório não encontrado em ${ORION_REPO}${NC}"; exit 1; }
+  git pull origin main
+  bun install
+  echo -e "${VERDE}✅ O.R.I.O.N atualizado!${NC}"
+}
+
+seed() {
+  if [ ! -f "$HOME/memoria.md" ]; then
+    echo -e "${LARANJA}📭 ~/memoria.md não encontrado — nada para semear.${NC}"
+    return
+  fi
+  cd "${ORION_DEV}" || exit 1
+  bun run script/seed-memory.ts 2>/dev/null || true
+}
+
+# ---- MAIN ----
+
+# Se o repositório não existe ainda, avisa
+if [ ! -d "${ORION_DEV}" ]; then
+  banner
+  echo -e "${VERMELHO}❌ O.R.I.O.N não está instalado.${NC}"
+  echo ""
+  echo "Instale com:"
+  echo -e "  ${CIANO}curl -fsSL https://raw.githubusercontent.com/gustavoolivera/orion-dev/main/scripts/orion-install.sh | bash${NC}"
+  echo ""
+  exit 1
+fi
+
+case "${1:-}" in
+  help|-h|--help)
+    help
+    ;;
+  update)
+    update
+    ;;
+  seed)
+    seed
+    ;;
+  "")
+    banner
+    echo -e "${LARANJA}🚀 Iniciando O.R.I.O.N...${NC}"
+    cd "${ORION_DEV}"
+    exec bun run --conditions=browser src/index.ts
+    ;;
+  *)
+    echo -e "${VERMELHO}❌ Comando desconhecido: $1${NC}"
+    echo "Use 'orion help' para ver os comandos disponíveis."
+    exit 1
+    ;;
+esac
