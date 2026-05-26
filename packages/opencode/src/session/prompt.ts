@@ -38,6 +38,9 @@ import { Shell } from "@/shell/shell"
 import { ShellID } from "@/tool/shell/id"
 import { AppFileSystem } from "@opencode-ai/core/filesystem"
 import { Truncate } from "@/tool/truncate"
+import { Client } from "../storage/db"
+import { AgentMemoryTable } from "../memory/memory.sql"
+import { desc } from "drizzle-orm"
 import { Image } from "@/image/image"
 import { decodeDataUrl } from "@/util/data-url"
 import { Process } from "@/util/process"
@@ -1423,6 +1426,27 @@ export const layer = Layer.effect(
               MessageV2.toModelMessagesEffect(msgs, model),
             ])
             const system = [...env, ...instructions, ...(skills ? [skills] : [])]
+
+            // 🧠 Injeção automática de memórias do O.R.I.O.N
+            const memoryCtx = yield* Effect.sync(() => {
+              try {
+                const rows = Client()
+                  .select()
+                  .from(AgentMemoryTable)
+                  .orderBy(desc(AgentMemoryTable.time_updated))
+                  .limit(20)
+                  .all()
+                if (rows.length === 0) return ""
+                const lines = rows.map(
+                  (r) => `- **${r.key}**: ${r.value}  [${r.category ?? "general"}]`,
+                )
+                return `## 🧠 Memórias do O.R.I.O.N\n\n${lines.join("\n")}`
+              } catch {
+                return ""
+              }
+            })
+            if (memoryCtx) system.push(memoryCtx)
+
             const format = lastUser.format ?? { type: "text" as const }
             if (format.type === "json_schema") system.push(STRUCTURED_OUTPUT_SYSTEM_PROMPT)
             const result = yield* handle.process({
