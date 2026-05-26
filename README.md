@@ -139,3 +139,4 @@ Quer mudar algo? É só mexer:
 ## 📜 Licença
 
 Baseado no [OpenCode](https://github.com/anomalyco/opencode) — licença original mantida.
+
