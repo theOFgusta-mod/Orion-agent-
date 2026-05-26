@@ -1,0 +1,58 @@
+<svg width="800" height="200" viewBox="0 0 800 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C89B7B"/>
+      <stop offset="50%" stop-color="#D4A574"/>
+      <stop offset="100%" stop-color="#B8736D"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C89B7B"/>
+      <stop offset="100%" stop-color="#B8736D"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Símbolo: constelação Orion simplificada -->
+  <!-- Cinturão 3 estrelas -->
+  <circle cx="60" cy="100" r="6" fill="#00E5FF" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="90" cy="100" r="5" fill="#00BFFF" filter="url(#glow)" opacity="0.8"/>
+  <circle cx="118" cy="100" r="4" fill="#AA66FF" filter="url(#glow)" opacity="0.7"/>
+
+  <!-- Linhas do cinturão -->
+  <line x1="66" y1="100" x2="84" y2="100" stroke="#00BFFF" stroke-width="1" opacity="0.4"/>
+  <line x1="95" y1="100" x2="114" y2="100" stroke="#AA66FF" stroke-width="1" opacity="0.4"/>
+
+  <!-- Ombro esquerdo (Betelgeuse) -->
+  <circle cx="40" cy="55" r="10" fill="#00E5FF" filter="url(#glow)" opacity="0.5"/>
+  <line x1="46" y1="60" x2="56" y2="94" stroke="#00E5FF" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Ombro direito (Bellatrix) -->
+  <circle cx="138" cy="55" r="8" fill="#AA66FF" filter="url(#glow)" opacity="0.5"/>
+  <line x1="132" y1="60" x2="122" y2="94" stroke="#AA66FF" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Joelho esquerdo (Saiph) -->
+  <circle cx="50" cy="155" r="7" fill="#00BFFF" filter="url(#glow)" opacity="0.4"/>
+  <line x1="54" y1="150" x2="58" y2="106" stroke="#00BFFF" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Joelho direito (Rigel) -->
+  <circle cx="120" cy="155" r="9" fill="#00E5FF" filter="url(#glow)" opacity="0.4"/>
+  <line x1="116" y1="150" x2="116" y2="106" stroke="#00E5FF" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Nome O.R.I.O.N -->
+  <text x="180" y="118" font-family="'Courier New', monospace" font-size="72" font-weight="bold" fill="url(#primaryGrad)" letter-spacing="8">O.R.I.O.N</text>
+
+  <!-- Tagline -->
+  <text x="185" y="152" font-family="'Courier New', monospace" font-size="14" fill="#4B7B8C" letter-spacing="4">ORGANIZED · RESPONSIVE · INTELLIGENT · OPERATIONAL · NAVIGATOR</text>
+
+  <!-- Separador -->
+  <line x1="180" y1="162" x2="650" y2="162" stroke="#1A2332" stroke-width="1" opacity="0.5"/>
+
+  <!-- Versão -->
+  <text x="185" y="180" font-family="'Courier New', monospace" font-size="11" fill="#2D3B4E" letter-spacing="2">v3.0 — SEU ASSISTENTE DE CÓDIGO COM PERSONALIDADE</text>
+</svg>

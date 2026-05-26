@@ -1,0 +1,223 @@
+{
+  "$schema": "https://opencode.ai/theme.json",
+  "defs": {
+    "orion0": "#0A0E14",
+    "orion1": "#111820",
+    "orion2": "#1A2332",
+    "orion3": "#2D3B4E",
+    "orion4": "#B8C7D9",
+    "orion5": "#D4E0ED",
+    "orion6": "#EAF0F7",
+    "orion7": "#00E5FF",
+    "orion8": "#00BFFF",
+    "orion9": "#0090D4",
+    "orion10": "#0066A0",
+    "orion11": "#FF3355",
+    "orion12": "#FF8800",
+    "orion13": "#FFD700",
+    "orion14": "#00E676",
+    "orion15": "#AA66FF"
+  },
+  "theme": {
+    "primary": {
+      "dark": "orion8",
+      "light": "orion10"
+    },
+    "secondary": {
+      "dark": "orion7",
+      "light": "orion9"
+    },
+    "accent": {
+      "dark": "orion15",
+      "light": "orion15"
+    },
+    "error": {
+      "dark": "orion11",
+      "light": "orion11"
+    },
+    "warning": {
+      "dark": "orion12",
+      "light": "orion12"
+    },
+    "success": {
+      "dark": "orion14",
+      "light": "orion14"
+    },
+    "info": {
+      "dark": "orion8",
+      "light": "orion9"
+    },
+    "text": {
+      "dark": "orion5",
+      "light": "orion0"
+    },
+    "textMuted": {
+      "dark": "#6A7B8C",
+      "light": "orion2"
+    },
+    "background": {
+      "dark": "orion0",
+      "light": "orion6"
+    },
+    "backgroundPanel": {
+      "dark": "orion1",
+      "light": "orion5"
+    },
+    "backgroundElement": {
+      "dark": "orion2",
+      "light": "orion4"
+    },
+    "border": {
+      "dark": "orion3",
+      "light": "orion3"
+    },
+    "borderActive": {
+      "dark": "orion8",
+      "light": "orion9"
+    },
+    "borderSubtle": {
+      "dark": "orion2",
+      "light": "orion3"
+    },
+    "diffAdded": {
+      "dark": "orion14",
+      "light": "orion14"
+    },
+    "diffRemoved": {
+      "dark": "orion11",
+      "light": "orion11"
+    },
+    "diffContext": {
+      "dark": "orion3",
+      "light": "orion3"
+    },
+    "diffHunkHeader": {
+      "dark": "orion3",
+      "light": "orion3"
+    },
+    "diffHighlightAdded": {
+      "dark": "orion14",
+      "light": "orion14"
+    },
+    "diffHighlightRemoved": {
+      "dark": "orion11",
+      "light": "orion11"
+    },
+    "diffAddedBg": {
+      "dark": "#0A1F14",
+      "light": "#E6F0EA"
+    },
+    "diffRemovedBg": {
+      "dark": "#1F0A0E",
+      "light": "#F0E6E8"
+    },
+    "diffContextBg": {
+      "dark": "orion1",
+      "light": "orion5"
+    },
+    "diffLineNumber": {
+      "dark": "orion3",
+      "light": "orion3"
+    },
+    "diffAddedLineNumberBg": {
+      "dark": "#0E1A12",
+      "light": "#DEE8E2"
+    },
+    "diffRemovedLineNumberBg": {
+      "dark": "#1A0E10",
+      "light": "#E8DEE0"
+    },
+    "markdownText": {
+      "dark": "orion4",
+      "light": "orion0"
+    },
+    "markdownHeading": {
+      "dark": "orion7",
+      "light": "orion9"
+    },
+    "markdownLink": {
+      "dark": "orion8",
+      "light": "orion9"
+    },
+    "markdownLinkText": {
+      "dark": "orion7",
+      "light": "orion8"
+    },
+    "markdownCode": {
+      "dark": "orion14",
+      "light": "orion14"
+    },
+    "markdownBlockQuote": {
+      "dark": "orion3",
+      "light": "orion3"
+    },
+    "markdownEmph": {
+      "dark": "orion12",
+      "light": "orion12"
+    },
+    "markdownStrong": {
+      "dark": "orion13",
+      "light": "orion13"
+    },
+    "markdownHorizontalRule": {
+      "dark": "orion3",
+      "light": "orion3"
+    },
+    "markdownListItem": {
+      "dark": "orion7",
+      "light": "orion9"
+    },
+    "markdownListEnumeration": {
+      "dark": "orion15",
+      "light": "orion15"
+    },
+    "markdownImage": {
+      "dark": "orion8",
+      "light": "orion9"
+    },
+    "markdownImageText": {
+      "dark": "orion7",
+      "light": "orion8"
+    },
+    "markdownCodeBlock": {
+      "dark": "orion4",
+      "light": "orion0"
+    },
+    "syntaxComment": {
+      "dark": "#5A6B7C",
+      "light": "orion3"
+    },
+    "syntaxKeyword": {
+      "dark": "orion15",
+      "light": "orion15"
+    },
+    "syntaxFunction": {
+      "dark": "orion7",
+      "light": "orion8"
+    },
+    "syntaxVariable": {
+      "dark": "orion12",
+      "light": "orion12"
+    },
+    "syntaxString": {
+      "dark": "orion14",
+      "light": "orion14"
+    },
+    "syntaxNumber": {
+      "dark": "orion13",
+      "light": "orion13"
+    },
+    "syntaxType": {
+      "dark": "orion7",
+      "light": "orion8"
+    },
+    "syntaxOperator": {
+      "dark": "orion8",
+      "light": "orion9"
+    },
+    "syntaxPunctuation": {
+      "dark": "orion4",
+      "light": "orion0"
+    }
+  }
+}

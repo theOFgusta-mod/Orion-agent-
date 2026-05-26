@@ -1,0 +1,223 @@
+{
+  "$schema": "https://opencode.ai/theme.json",
+  "defs": {
+    "bege0": "#3D2B1F",
+    "bege1": "#5C4033",
+    "bege2": "#6B4A35",
+    "bege3": "#8B6B4A",
+    "bege4": "#A0845C",
+    "bege5": "#C89B7B",
+    "bege6": "#D4A574",
+    "bege7": "#E8D5B7",
+    "bege8": "#F0E8D8",
+    "bege9": "#F5EDE0",
+    "bege10": "#FFF8F0",
+    "bege11": "#B8736D",
+    "bege12": "#D4A017",
+    "bege13": "#8B9E6B",
+    "bege14": "#7A9BAE",
+    "bege15": "#C08A7A"
+  },
+  "theme": {
+    "primary": {
+      "dark": "bege5",
+      "light": "bege3"
+    },
+    "secondary": {
+      "dark": "bege6",
+      "light": "bege4"
+    },
+    "accent": {
+      "dark": "bege15",
+      "light": "bege15"
+    },
+    "error": {
+      "dark": "bege11",
+      "light": "bege11"
+    },
+    "warning": {
+      "dark": "bege12",
+      "light": "bege12"
+    },
+    "success": {
+      "dark": "bege13",
+      "light": "bege13"
+    },
+    "info": {
+      "dark": "bege14",
+      "light": "bege14"
+    },
+    "text": {
+      "dark": "bege0",
+      "light": "bege9"
+    },
+    "textMuted": {
+      "dark": "bege2",
+      "light": "bege7"
+    },
+    "background": {
+      "dark": "bege9",
+      "light": "bege10"
+    },
+    "backgroundPanel": {
+      "dark": "bege8",
+      "light": "bege9"
+    },
+    "backgroundElement": {
+      "dark": "bege7",
+      "light": "bege8"
+    },
+    "border": {
+      "dark": "bege6",
+      "light": "bege6"
+    },
+    "borderActive": {
+      "dark": "bege5",
+      "light": "bege3"
+    },
+    "borderSubtle": {
+      "dark": "bege7",
+      "light": "bege7"
+    },
+    "diffAdded": {
+      "dark": "bege13",
+      "light": "bege13"
+    },
+    "diffRemoved": {
+      "dark": "bege11",
+      "light": "bege11"
+    },
+    "diffContext": {
+      "dark": "bege6",
+      "light": "bege6"
+    },
+    "diffHunkHeader": {
+      "dark": "bege6",
+      "light": "bege6"
+    },
+    "diffHighlightAdded": {
+      "dark": "bege13",
+      "light": "bege13"
+    },
+    "diffHighlightRemoved": {
+      "dark": "bege11",
+      "light": "bege11"
+    },
+    "diffAddedBg": {
+      "dark": "#E8F0E0",
+      "light": "#F0F8EA"
+    },
+    "diffRemovedBg": {
+      "dark": "#F0E0E0",
+      "light": "#F8EAEA"
+    },
+    "diffContextBg": {
+      "dark": "bege8",
+      "light": "bege9"
+    },
+    "diffLineNumber": {
+      "dark": "bege4",
+      "light": "bege4"
+    },
+    "diffAddedLineNumberBg": {
+      "dark": "#E0EAD8",
+      "light": "#E8F2E0"
+    },
+    "diffRemovedLineNumberBg": {
+      "dark": "#EAD8D8",
+      "light": "#F2E0E0"
+    },
+    "markdownText": {
+      "dark": "bege0",
+      "light": "bege9"
+    },
+    "markdownHeading": {
+      "dark": "bege5",
+      "light": "bege3"
+    },
+    "markdownLink": {
+      "dark": "bege14",
+      "light": "bege14"
+    },
+    "markdownLinkText": {
+      "dark": "bege5",
+      "light": "bege4"
+    },
+    "markdownCode": {
+      "dark": "bege13",
+      "light": "bege13"
+    },
+    "markdownBlockQuote": {
+      "dark": "bege6",
+      "light": "bege6"
+    },
+    "markdownEmph": {
+      "dark": "bege12",
+      "light": "bege12"
+    },
+    "markdownStrong": {
+      "dark": "bege1",
+      "light": "bege1"
+    },
+    "markdownHorizontalRule": {
+      "dark": "bege6",
+      "light": "bege6"
+    },
+    "markdownListItem": {
+      "dark": "bege5",
+      "light": "bege4"
+    },
+    "markdownListEnumeration": {
+      "dark": "bege15",
+      "light": "bege15"
+    },
+    "markdownImage": {
+      "dark": "bege14",
+      "light": "bege14"
+    },
+    "markdownImageText": {
+      "dark": "bege5",
+      "light": "bege4"
+    },
+    "markdownCodeBlock": {
+      "dark": "bege0",
+      "light": "bege9"
+    },
+    "syntaxComment": {
+      "dark": "bege4",
+      "light": "bege4"
+    },
+    "syntaxKeyword": {
+      "dark": "bege15",
+      "light": "bege15"
+    },
+    "syntaxFunction": {
+      "dark": "bege5",
+      "light": "bege3"
+    },
+    "syntaxVariable": {
+      "dark": "bege12",
+      "light": "bege12"
+    },
+    "syntaxString": {
+      "dark": "bege13",
+      "light": "bege13"
+    },
+    "syntaxNumber": {
+      "dark": "bege12",
+      "light": "bege12"
+    },
+    "syntaxType": {
+      "dark": "bege14",
+      "light": "bege14"
+    },
+    "syntaxOperator": {
+      "dark": "bege5",
+      "light": "bege3"
+    },
+    "syntaxPunctuation": {
+      "dark": "bege0",
+      "light": "bege9"
+    }
+  }
+}
