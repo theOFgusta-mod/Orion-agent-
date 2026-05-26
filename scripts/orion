@@ -1,105 +1,151 @@
 #!/usr/bin/env bash
-# -------------------------------------------------------------------
+# ═══════════════════════════════════════════════════════════════
 # O.R.I.O.N — Organized Responsive Intelligent Operational Navigator
-# Comando global para iniciar o assistente de terminal
-# -------------------------------------------------------------------
+# Comando global para iniciar o assistente no terminal
+# Uso: orion [comando]
+# ═══════════════════════════════════════════════════════════════
 set -euo pipefail
 
-# Caminho de desenvolvimento (sobrescreve com env var)
-if [ -n "${ORION_DEV_DIR:-}" ]; then
-  ORION_REPO="${ORION_DEV_DIR}"
-  ORION_HOME="${ORION_DEV_DIR}"
-else
-  ORION_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/orion"
-  ORION_REPO="${ORION_HOME}/repo"
-fi
+ORION_HOME="${ORION_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/orion}"
+ORION_REPO="${ORION_HOME}/repo"
 ORION_DEV="${ORION_REPO}/packages/opencode"
+ORION_BIN="${HOME}/.local/bin/orion"
 
-# ---- Cores ----
-VERDE='\033[0;32m'
-VERMELHO='\033[0;31m'
-LARANJA='\033[38;5;214m'
-CIANO='\033[0;36m'
-NC='\033[0m'
+# Cores
+R='\033[0;31m'
+G='\033[0;32m'
+Y='\033[38;5;214m'
+C='\033[0;36m'
+M='\033[0;35m'
+B='\033[1m'
+N='\033[0m'
 
 banner() {
-  echo -e "${VERDE}"
+  echo -e "${M}"
   echo "  █████╗      ██████╗      ██╗           █████╗      ███╗   ██╗"
   echo " ██╔══██╗     ██╔══██╗     ██║          ██╔══██╗     ████╗  ██║"
   echo " ██║  ██║     ██████╔╝     ██║          ██║  ██║     ██╔██╗ ██║"
   echo " ██║  ██║     ██╔══██╗     ██║          ██║  ██║     ██║╚██╗██║"
   echo " ╚█████╔╝     ██║  ██║     ██║          ╚█████╔╝     ██║ ╚████║"
   echo "  ╚════╝      ╚═╝  ╚═╝     ╚═╝           ╚════╝      ╚═╝  ╚═══╝"
-  echo -e "${NC}"
+  echo -e "${N}"
 }
 
 help() {
   banner
-  echo -e "${CIANO}O.R.I.O.N — Assistente de terminal com personalidade${NC}"
+  echo -e "${C}O.R.I.O.N — ${B}Assistente de terminal com personalidade${N}"
   echo ""
-  echo "Uso: orion [comando]"
+  echo -e "${B}Uso:${N} orion [comando]"
   echo ""
   echo "Comandos:"
   echo "  (sem argumentos)  Inicia o TUI do O.R.I.O.N"
-  echo "  update            Atualiza o O.R.I.O.N para a versão mais recente"
-  echo "  seed              Popula memórias do ~/memoria.md para o banco"
+  echo "  update            Atualiza para a versão mais recente"
+  echo "  seed              Importa memórias do ~/memoria.md"
+  echo "  uninstall         Remove o O.R.I.O.N do sistema"
   echo "  help              Mostra esta ajuda"
+}
+
+# ── Instalação automática (se o repo não existe, baixa na hora) ──
+auto_install() {
+  if [ -d "${ORION_DEV}" ]; then
+    return 0
+  fi
+
+  echo -e "${Y}📡 O.R.I.O.N não encontrado localmente. Baixando...${N}"
+  mkdir -p "${ORION_HOME}"
+
+  if ! command -v git &>/dev/null; then
+    echo -e "${R}❌ Git não encontrado. Instale git primeiro:${N}"
+    echo "  sudo pacman -S git   # Arch"
+    echo "  sudo apt install git # Debian/Ubuntu"
+    exit 1
+  fi
+
+  git clone --depth 1 "https://github.com/theOFgusta-mod/Orion-agent-.git" "${ORION_REPO}" 2>&1
+
+  if ! command -v bun &>/dev/null; then
+    echo -e "${Y}📦 Instalando Bun...${N}"
+    curl -fsSL https://bun.sh/install | bash
+    export BUN_INSTALL="${HOME}/.bun"
+    export PATH="${BUN_INSTALL}/bin:${PATH}"
+  fi
+
+  echo -e "${Y}📦 Instalando dependências...${N}"
+  cd "${ORION_REPO}"
+  bun install 2>&1 | tail -3
+
+  # Seed automático
+  if [ -f "${HOME}/memoria.md" ]; then
+    cd "${ORION_DEV}"
+    bun run script/seed-memory.ts 2>/dev/null || true
+  fi
+
   echo ""
-  echo "Exemplos:"
-  echo "  orion             Abre o assistente"
-  echo "  orion update      Baixa atualizações"
+  echo -e "${G}✅ O.R.I.O.N instalado com sucesso em:${N}"
+  echo "   ${ORION_HOME}"
+  echo ""
+  echo -e "Digite ${B}orion${N} para começar!"
   echo ""
 }
 
+# ── Comandos ──
 update() {
-  echo -e "${LARANJA}🔄 Atualizando O.R.I.O.N...${NC}"
-  cd "${ORION_REPO}" || { echo -e "${VERMELHO}❌ Repositório não encontrado em ${ORION_REPO}${NC}"; exit 1; }
+  if [ ! -d "${ORION_REPO}/.git" ]; then
+    echo -e "${R}❌ O.R.I.O.N não encontrado. Execute 'orion' para instalar.${N}"
+    exit 1
+  fi
+  echo -e "${Y}🔄 Atualizando O.R.I.O.N...${N}"
+  cd "${ORION_REPO}"
   git pull origin main
-  bun install
-  echo -e "${VERDE}✅ O.R.I.O.N atualizado!${NC}"
+  bun install 2>&1 | tail -3
+  echo -e "${G}✅ Atualizado!${N}"
 }
 
 seed() {
-  if [ ! -f "$HOME/memoria.md" ]; then
-    echo -e "${LARANJA}📭 ~/memoria.md não encontrado — nada para semear.${NC}"
-    return
+  if [ ! -f "${HOME}/memoria.md" ]; then
+    echo -e "${Y}📭 ~/memoria.md não encontrado.${N}"
+    exit 0
   fi
-  cd "${ORION_DEV}" || exit 1
-  bun run script/seed-memory.ts 2>/dev/null || true
+  cd "${ORION_DEV}"
+  bun run script/seed-memory.ts 2>/dev/null || echo -e "${Y}   Seed concluído.${N}"
 }
 
-# ---- MAIN ----
+uninstall() {
+  echo -e "${Y}🗑️  Removendo O.R.I.O.N...${N}"
+  rm -rf "${ORION_HOME}" 2>/dev/null || true
+  rm -f "${ORION_BIN}" 2>/dev/null || true
+  # Remove alias do bashrc se existir
+  sed -i '/alias orion=/d' "${HOME}/.bashrc" 2>/dev/null || true
+  sed -i '/alias orion=/d' "${HOME}/.zshrc" 2>/dev/null || true
+  echo -e "${G}✅ O.R.I.O.N removido. Até mais!${N}"
+}
 
-# Se o repositório não existe ainda, avisa
-if [ ! -d "${ORION_DEV}" ]; then
-  banner
-  echo -e "${VERMELHO}❌ O.R.I.O.N não está instalado.${NC}"
-  echo ""
-  echo "Instale com:"
-  echo -e "  ${CIANO}curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/scripts/orion-install.sh | bash${NC}"
-  echo ""
-  exit 1
-fi
-
+# ── MAIN ──
 case "${1:-}" in
   help|-h|--help)
     help
     ;;
   update)
+    auto_install
     update
     ;;
   seed)
+    auto_install
     seed
     ;;
+  uninstall)
+    uninstall
+    ;;
   "")
+    auto_install
     banner
-    echo -e "${LARANJA}🚀 Iniciando O.R.I.O.N...${NC}"
+    echo -e "${M}🚀 Inicializando O.R.I.O.N...${N}"
     cd "${ORION_DEV}"
     exec bun run --conditions=browser src/index.ts
     ;;
   *)
-    echo -e "${VERMELHO}❌ Comando desconhecido: $1${NC}"
-    echo "Use 'orion help' para ver os comandos disponíveis."
+    echo -e "${R}❌ Comando desconhecido: $1${N}"
+    echo "Use 'orion help'"
     exit 1
     ;;
 esac

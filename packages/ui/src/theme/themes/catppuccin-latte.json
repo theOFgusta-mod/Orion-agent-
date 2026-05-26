@@ -1,0 +1,45 @@
+{
+  "$schema": "https://opencode.ai/desktop-theme.json",
+  "name": "Catppuccin Latte",
+  "id": "catppuccin-latte",
+  "light": {
+    "palette": {
+      "neutral": "#eff1f5",
+      "ink": "#4c4f69",
+      "primary": "#7287fd",
+      "accent": "#d20f39",
+      "success": "#40a02b",
+      "warning": "#df8e1d",
+      "error": "#d20f39",
+      "info": "#04a5e5",
+      "diffAdd": "#a6d189",
+      "diffDelete": "#e78284"
+    },
+    "overrides": {
+      "syntax-comment": "#6c6f85",
+      "syntax-keyword": "#8839ef",
+      "syntax-primitive": "#1e66f5",
+      "syntax-constant": "#fe640b"
+    }
+  },
+  "dark": {
+    "palette": {
+      "neutral": "#292c3c",
+      "ink": "#cad3f5",
+      "primary": "#b4befe",
+      "accent": "#ed8796",
+      "success": "#a6da95",
+      "warning": "#eed49f",
+      "error": "#ed8796",
+      "info": "#7dc4e4",
+      "diffAdd": "#8bd5ca",
+      "diffDelete": "#ed8796"
+    },
+    "overrides": {
+      "syntax-comment": "#6c7086",
+      "syntax-keyword": "#cba6f7",
+      "syntax-primitive": "#8aadf4",
+      "syntax-constant": "#f5a97f"
+    }
+  }
+}
