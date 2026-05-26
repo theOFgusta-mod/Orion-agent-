@@ -48,14 +48,6 @@ else
     exit 1
 fi
 
-# ── Verificar pip ──
-if ! $PYTHON -m pip --version &>/dev/null; then
-    echo -e "${RED}❌${NC} pip não encontrado."
-    echo "  sudo pacman -S python-pip"
-    echo "  sudo apt install python3-pip"
-    exit 1
-fi
-
 # ── Detectar gerenciador de pacotes ──
 if command -v pacman &>/dev/null; then
     PKG_MGR="pacman"
@@ -108,15 +100,21 @@ fi
 # ── Navega para o diretório do beta ──
 cd "$INSTALL_DIR/$ORION_DIR"
 
-# ── Virtual env ──
+# ── Virtual env (já vem com pip incluído) ──
 VENV_DIR="$INSTALL_DIR/$ORION_DIR/.venv"
 if [ ! -d "$VENV_DIR" ]; then
-    echo -e "${BLUE}🐍${NC} Criando ambiente virtual..."
+    echo -e "${BLUE}🐍${NC} Criando ambiente virtual (já vem com pip)..."
     $PYTHON -m venv "$VENV_DIR"
 fi
 
+# Verifica se o pip do venv funciona
+if ! "$VENV_DIR/bin/pip" --version &>/dev/null; then
+    echo -e "${YELLOW}📦${NC} Instalando pip no ambiente virtual..."
+    "$VENV_DIR/bin/python" -m ensurepip --upgrade 2>/dev/null || true
+fi
+
 echo -e "${BLUE}📦${NC} Instalando dependências Python..."
-"$VENV_DIR/bin/pip" install -q --upgrade pip
+"$VENV_DIR/bin/pip" install -q --upgrade pip 2>/dev/null || true
 "$VENV_DIR/bin/pip" install -q -r requirements.txt 2>&1 | tail -3
 
 # ── Node.js para WhatsApp ──
@@ -226,15 +224,26 @@ chmod +x "$CMD_PATH"
 
 # ── Detectar PATH ──
 if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
-    SHELL_CONFIG="$HOME/.bashrc"
-    if [ -n "$ZSH_VERSION" ]; then
-        SHELL_CONFIG="$HOME/.zshrc"
+    # Detecta shell preferido
+    if [ "$SHELL" = "/usr/bin/fish" ] || [ "$SHELL" = "/bin/fish" ]; then
+        SHELL_CONFIG="$HOME/.config/fish/config.fish"
+        mkdir -p "$(dirname "$SHELL_CONFIG")"
+        echo "" >> "$SHELL_CONFIG"
+        echo "# O.R.I.O.N Beta" >> "$SHELL_CONFIG"
+        echo "fish_add_path $BIN_DIR" >> "$SHELL_CONFIG"
+        echo -e "${YELLOW}📌${NC} Adicionado $BIN_DIR ao PATH em $SHELL_CONFIG"
+        echo -e "${YELLOW}💡${NC} Execute: exec fish"
+    else
+        SHELL_CONFIG="$HOME/.bashrc"
+        if [ -n "$ZSH_VERSION" ]; then
+            SHELL_CONFIG="$HOME/.zshrc"
+        fi
+        echo "" >> "$SHELL_CONFIG"
+        echo "# O.R.I.O.N Beta" >> "$SHELL_CONFIG"
+        echo "export PATH=\"\$PATH:$BIN_DIR\"" >> "$SHELL_CONFIG"
+        echo -e "${YELLOW}📌${NC} Adicionado $BIN_DIR ao PATH em $SHELL_CONFIG"
+        echo -e "${YELLOW}💡${NC} Execute: source $SHELL_CONFIG"
     fi
-    echo "" >> "$SHELL_CONFIG"
-    echo "# O.R.I.O.N Beta" >> "$SHELL_CONFIG"
-    echo "export PATH=\"\$PATH:$BIN_DIR\"" >> "$SHELL_CONFIG"
-    echo -e "${YELLOW}📌${NC} Adicionado $BIN_DIR ao PATH em $SHELL_CONFIG"
-    echo -e "${YELLOW}💡${NC} Execute: source $SHELL_CONFIG"
 fi
 
 # ── Sucesso ──
