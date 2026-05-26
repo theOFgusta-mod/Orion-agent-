@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Node
+node_modules/
+package-lock.json
+
+# Sessões
+sessions/
+
+# Config local (não commitar chaves)
+config/config.yaml
+
+# Cache Spotify
+.spotify_cache
+
+# Runtime
+*.log

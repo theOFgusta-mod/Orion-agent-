@@ -62,6 +62,27 @@ bun run --conditions=browser src/index.ts
 
 ---
 
+## 🧪 O.R.I.O.N Beta — Multi-Plataforma
+
+> 🤖 WhatsApp + Telegram + Spotify + IA + Memória Persistente
+> [Saiba mais →](orion-beta/BETA.md)
+
+Uma versão **Python** do O.R.I.O.N que roda fora do terminal também:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/orion-beta/install.sh | bash
+orion-beta
+```
+
+| Bridge | Status |
+|--------|--------|
+| 🎵 Spotify | ✅ Funcional |
+| 🧠 Memória | ✅ Funcional |
+| 💬 WhatsApp | 🧪 Em desenvolvimento |
+| 📱 Telegram | 🧪 Em desenvolvimento |
+
+---
+
 ## ⚡ Sobre
 
 **O.R.I.O.N** é um fork do [OpenCode](https://opencode.ai) com personalidade própria. Um agente de IA para terminal que:
