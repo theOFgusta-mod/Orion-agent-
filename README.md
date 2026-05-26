@@ -78,6 +78,7 @@ orion-beta
 |--------|--------|
 | 🎵 Spotify | ✅ Funcional |
 | 🧠 Memória | ✅ Funcional |
+| 📧 E-mail | ✅ Funcional |
 | 💬 WhatsApp | 🧪 Em desenvolvimento |
 | 📱 Telegram | 🧪 Em desenvolvimento |
 

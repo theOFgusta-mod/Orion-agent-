@@ -5,6 +5,8 @@
 >
 > 🧪 **Beta** — WhatsApp e Telegram estão em desenvolvimento.
 > Eles funcionam, mas ainda podem ter mudanças na API.
+>
+> ✅ **E-mail** — Funcional! Leia e responda e-mails com IA.
 
 ---
 
@@ -34,6 +36,14 @@
 - Sessão persistente (não precisa escanear toda vez)
 - API HTTP local para comunicação Python ↔ Node
 - ⚠️ Em desenvolvimento — pode ter mudanças
+
+### 📧 E-mail Bridge ✅
+- Leitura de e-mails via **IMAP** (Gmail, Outlook, qualquer servidor)
+- Envio de e-mails via **SMTP** com suporte a TLS
+- Polling automático de e-mails não lidos
+- Resposta automática com **IA** (opcional)
+- Comandos: `ver e-mails`, `enviar e-mail para [email]: [msg]`, `responder [nome]: [msg]`
+- Suporte a **App Password** do Google
 
 ### 🎵 Spotify Controller
 - Autenticação OAuth com cache
@@ -96,6 +106,16 @@ plataformas:
     enabled: false     # EM DESENVOLVIMENTO — Requer Node.js
     webhook_port: 8888
     session_dir: "sessions/whatsapp"
+  email:
+    enabled: false     # Mude para true após configurar
+    user: ""           # Seu e-mail (ex: seu@gmail.com)
+    password: ""       # Senha de App (16 dígitos) ou senha normal
+    imap_host: "imap.gmail.com"
+    smtp_host: "smtp.gmail.com"
+    poll_interval: 60  # Segundos entre verificações
+    auto_reply: false  # Responder automaticamente com IA?
+    max_emails: 5
+    default_subject: "Mensagem do O.R.I.O.N Beta"
   spotify:
     enabled: false
     client_id: ""      # Spotify Developer ID
@@ -119,6 +139,13 @@ plataformas:
 4. Inicie: `orion-beta`
 5. Envie `/start` no Telegram
 
+### E-mail ✅
+1. Gere uma **Senha de App** (Gmail): https://myaccount.google.com/apppasswords
+2. Coloque no `config.yaml` (`email.user` e `email.password`)
+3. Ative: `email.enabled: true` (ou `ativo: true`)
+4. Inicie: `orion-beta`
+5. Teste: `ver e-mails`
+
 ### WhatsApp 🧪
 1. Certifique-se de ter Node.js instalado (o instalador pergunta se quer instalar)
 2. Ative `whatsapp.enabled: true` no config
@@ -136,6 +163,8 @@ orion-beta/                   # Dentro do repositório Orion-agent-
 ├── package.json            # Dependências Node (WhatsApp)
 ├── requirements.txt        # Dependências Python
 ├── BETA.md                 # Esta documentação
+├── scripts/
+│   └── test-email.sh       # Teste rápido de e-mail
 ├── config/
 │   └── config.yaml         # Configuração central
 ├── core/
@@ -147,6 +176,7 @@ orion-beta/                   # Dentro do repositório Orion-agent-
 │   ├── __init__.py
 │   ├── telegram.py         # Telegram Bot 🧪
 │   ├── whatsapp.py         # WhatsApp Web 🧪
+│   ├── email.py            # E-mail IMAP/SMTP ✅
 │   └── spotify.py          # Spotify Controller
 └── sessions/               # Sessões (criado runtime)
 ```
@@ -168,6 +198,7 @@ orion-beta/                   # Dentro do repositório Orion-agent-
 - `spotipy` — Spotify
 - `pyyaml` — Config
 - `httpx` — HTTP requests
+- *(E-mail usa apenas libs nativas: `imaplib`, `smtplib`, `email`)*
 
 ---
 
@@ -178,6 +209,7 @@ orion-beta/                   # Dentro do repositório Orion-agent-
 - [x] Telegram Bridge 🧪
 - [x] WhatsApp Bridge 🧪
 - [x] Spotify Controller
+- [x] E-mail Bridge (IMAP/SMTP)
 - [x] CLI interativo
 - [x] Instalação one-line com auto-deps
 - [ ] Estabilizar WhatsApp e Telegram
