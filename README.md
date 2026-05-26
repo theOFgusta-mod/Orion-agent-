@@ -70,7 +70,7 @@ bun run --conditions=browser src/index.ts
 Uma versão **Python** do O.R.I.O.N que roda fora do terminal também:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/orion-beta/install.sh | bash
+curl -fsSL https://github.com/theOFgusta-mod/Orion-agent-/raw/refs/heads/main/orion-beta/install.sh | bash
 orion-beta
 ```
 

@@ -63,7 +63,7 @@
 
 **One-line:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/orion-beta/install.sh | bash
+curl -fsSL https://github.com/theOFgusta-mod/Orion-agent-/raw/refs/heads/main/orion-beta/install.sh | bash
 ```
 
 **Manual:**
@@ -128,7 +128,7 @@ plataformas:
 ## 🚀 Como Usar
 
 ### Modo CLI (recomendado para testes)
-1. Instale: `curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/orion-beta/install.sh | bash`
+1. Instale: `curl -fsSL https://github.com/theOFgusta-mod/Orion-agent-/raw/refs/heads/main/orion-beta/install.sh | bash`
 2. Execute: `orion-beta`
 3. Digite comandos como `status`, `memorize que`, `ajuda`
 
