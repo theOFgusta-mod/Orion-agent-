@@ -33,7 +33,7 @@
 ## 🚀 One-line Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/scripts/orion-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/scripts/install.sh | bash
 ```
 
 Then just type:
@@ -94,8 +94,9 @@ Este fork inclui o agente **O.R.I.O.N** pronto pra usar:
 
 | Tema | Descrição |
 |------|-----------|
-| `orion` | 🔵 Tema escuro tech: azul elétrico, ciano, roxo, dourado |
-| `smoke-theme` | Padrão do OpenCode |
+| `catppuccin-latte` | 🧁 Warm light theme: beige, lavender, pink, blue |
+| `catppuccin` | 🐱 Dark purple theme: cyan, pink, blue |
+| `orion` | 🔵 Dark tech: electric blue, cyan, purple, gold |
 
 ### Ativar o tema O.R.I.O.N
 

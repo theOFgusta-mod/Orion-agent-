@@ -33,7 +33,7 @@
 ## 🚀 Instalação (uma linha)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/scripts/orion-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/theOFgusta-mod/Orion-agent-/main/scripts/install.sh | bash
 ```
 
 Depois é só digitar no terminal:
@@ -94,8 +94,9 @@ O agente **O.R.I.O.N** já vem incluso. É só usar:
 
 | Tema | Descrição |
 |------|-----------|
-| `orion` | 🔵 Tema escuro tech: azul elétrico, ciano, roxo e detalhes dourados |
-| `smoke-theme` | Tema padrão herdado do OpenCode |
+| `catppuccin-latte` | 🧁 Tema claro quente: bege, lavanda, rosa e detalhes em azul |
+| `catppuccin` | 🐱 Tema escuro roxo: ciano, rosa e azul |
+| `orion` | 🔵 Tema escuro tech: azul elétrico, ciano, roxo e dourado |
 
 ### Ativar o tema O.R.I.O.N
 
