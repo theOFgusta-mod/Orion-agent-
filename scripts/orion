@@ -4,7 +4,9 @@
 # Comando global para iniciar o assistente no terminal
 # Uso: orion [comando]
 # ═══════════════════════════════════════════════════════════════
-set -euo pipefail
+
+# ── Sem set -e: tratamos erros manualmente pra dar mensagens bonitas ──
+set -uo pipefail
 
 ORION_HOME="${ORION_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/orion}"
 ORION_REPO="${ORION_HOME}/repo"
@@ -12,13 +14,7 @@ ORION_DEV="${ORION_REPO}/packages/opencode"
 ORION_BIN="${HOME}/.local/bin/orion"
 
 # Cores
-R='\033[0;31m'
-G='\033[0;32m'
-Y='\033[38;5;214m'
-C='\033[0;36m'
-M='\033[0;35m'
-B='\033[1m'
-N='\033[0m'
+R='\033[0;31m'; G='\033[0;32m'; Y='\033[38;5;214m'; C='\033[0;36m'; M='\033[0;35m'; B='\033[1m'; N='\033[0m'
 
 banner() {
   echo -e "${M}"
@@ -45,39 +41,66 @@ help() {
   echo "  help              Mostra esta ajuda"
 }
 
+# ── Utilitário de erro ──
+die() {
+  echo -e "${R}❌ $1${N}" >&2
+  echo -e "${Y}💡 $2${N}" >&2
+  exit 1
+}
+
 # ── Instalação automática (se o repo não existe, baixa na hora) ──
 auto_install() {
-  if [ -d "${ORION_DEV}" ]; then
-    return 0
-  fi
+  [ -d "${ORION_DEV}" ] && return 0
 
   echo -e "${Y}📡 O.R.I.O.N não encontrado localmente. Baixando...${N}"
   mkdir -p "${ORION_HOME}"
 
-  if ! command -v git &>/dev/null; then
-    echo -e "${R}❌ Git não encontrado. Instale git primeiro:${N}"
-    echo "  sudo pacman -S git   # Arch"
-    echo "  sudo apt install git # Debian/Ubuntu"
-    exit 1
+  # Verificar git
+  command -v git &>/dev/null || die "Git não encontrado." \
+    "Instale: sudo pacman -S git | sudo apt install git | sudo dnf install git"
+
+  # Clonar
+  echo -e "${Y}📥 Clonando repositório...${N}"
+  if ! git clone --depth 1 "https://github.com/theOFgusta-mod/Orion-agent-.git" "${ORION_REPO}" 2>&1; then
+    die "Falha ao baixar o O.R.I.O.N." \
+      "Verifique sua internet. Se persistir, tente: git clone https://github.com/theOFgusta-mod/Orion-agent-.git"
   fi
 
-  git clone --depth 1 "https://github.com/theOFgusta-mod/Orion-agent-.git" "${ORION_REPO}" 2>&1
-
+  # Instalar Bun se necessário
   if ! command -v bun &>/dev/null; then
     echo -e "${Y}📦 Instalando Bun...${N}"
-    curl -fsSL https://bun.sh/install | bash
+    command -v curl &>/dev/null || die "curl não encontrado." "Instale: sudo pacman -S curl | sudo apt install curl"
+    for attempt in 1 2 3; do
+      echo -e "${Y}   Tentativa $attempt de 3...${N}"
+      if curl -fsSL https://bun.sh/install | bash; then
+        echo -e "${G}✅ Bun instalado!${N}"
+        break
+      fi
+      [ "$attempt" -eq 3 ] && die "Falha ao instalar Bun." \
+        "Tente: curl -fsSL https://bun.sh/install | bash"
+      sleep 2
+    done
     export BUN_INSTALL="${HOME}/.bun"
     export PATH="${BUN_INSTALL}/bin:${PATH}"
   fi
+  echo -e "${G}✅${N} Bun $(bun --version)"
 
-  echo -e "${Y}📦 Instalando dependências...${N}"
+  # Instalar dependências
+  echo -e "${Y}📦 Instalando dependências (pode levar alguns minutos)...${N}"
   cd "${ORION_REPO}"
-  bun install 2>&1 | tail -3
+  if ! bun install 2>&1; then
+    echo ""
+    echo -e "${Y}⚠️  bun install falhou. Causas comuns:${N}"
+    echo "   • Faltam ferramentas de build (Arch: sudo pacman -S base-devel)"
+    echo "   • Bun desatualizado (bun upgrade)"
+    echo "   • Erro de rede (tente de novo: cd $ORION_REPO && bun install)"
+    die "Instalação de dependências falhou." "Veja as sugestões acima."
+  fi
 
   # Seed automático
   if [ -f "${HOME}/memoria.md" ]; then
-    cd "${ORION_DEV}"
-    bun run script/seed-memory.ts 2>/dev/null || true
+    echo -e "${Y}🧠 Importando memórias...${N}"
+    (cd "${ORION_DEV}" && bun run script/seed-memory.ts 2>/dev/null) || true
   fi
 
   echo ""
@@ -85,57 +108,40 @@ auto_install() {
   echo "   ${ORION_HOME}"
   echo ""
   echo -e "Digite ${B}orion${N} para começar!"
-  echo ""
 }
 
 # ── Comandos ──
 update() {
-  if [ ! -d "${ORION_REPO}/.git" ]; then
-    echo -e "${R}❌ O.R.I.O.N não encontrado. Execute 'orion' para instalar.${N}"
-    exit 1
-  fi
+  [ -d "${ORION_REPO}/.git" ] || die "O.R.I.O.N não encontrado." "Execute 'orion' para instalar primeiro."
   echo -e "${Y}🔄 Atualizando O.R.I.O.N...${N}"
   cd "${ORION_REPO}"
-  git pull origin main
-  bun install 2>&1 | tail -3
+  git pull origin main || die "Falha ao atualizar." "Verifique sua internet."
+  echo -e "${Y}📦 Atualizando dependências...${N}"
+  bun install 2>&1 || die "Falha ao atualizar dependências." "Tente: cd $ORION_REPO && bun install"
   echo -e "${G}✅ Atualizado!${N}"
 }
 
 seed() {
-  if [ ! -f "${HOME}/memoria.md" ]; then
-    echo -e "${Y}📭 ~/memoria.md não encontrado.${N}"
-    exit 0
-  fi
+  [ -f "${HOME}/memoria.md" ] || { echo -e "${Y}📭 ~/memoria.md não encontrado.${N}"; return; }
   cd "${ORION_DEV}"
-  bun run script/seed-memory.ts 2>/dev/null || echo -e "${Y}   Seed concluído.${N}"
+  bun run script/seed-memory.ts 2>/dev/null || echo -e "${Y}   Seed de memória concluído.${N}"
 }
 
 uninstall() {
   echo -e "${Y}🗑️  Removendo O.R.I.O.N...${N}"
   rm -rf "${ORION_HOME}" 2>/dev/null || true
   rm -f "${ORION_BIN}" 2>/dev/null || true
-  # Remove alias do bashrc se existir
   sed -i '/alias orion=/d' "${HOME}/.bashrc" 2>/dev/null || true
   sed -i '/alias orion=/d' "${HOME}/.zshrc" 2>/dev/null || true
-  echo -e "${G}✅ O.R.I.O.N removido. Até mais!${N}"
+  echo -e "${G}✅ O.R.I.O.N removido. Até mais, Senhor!${N}"
 }
 
 # ── MAIN ──
 case "${1:-}" in
-  help|-h|--help)
-    help
-    ;;
-  update)
-    auto_install
-    update
-    ;;
-  seed)
-    auto_install
-    seed
-    ;;
-  uninstall)
-    uninstall
-    ;;
+  help|-h|--help) help ;;
+  update)         auto_install && update ;;
+  seed)           auto_install && seed ;;
+  uninstall)      uninstall ;;
   "")
     auto_install
     banner
