@@ -29,7 +29,34 @@ check_dep() {
 echo -e "${Y}🔍 Verificando dependências do sistema...${N}"
 check_dep "git"     "sudo pacman -S git  |  sudo apt install git  |  sudo dnf install git"
 check_dep "curl"    "sudo pacman -S curl |  sudo apt install curl |  sudo dnf install curl"
-echo -e "${G}✅ Dependências básicas ok${N}"
+
+# Verificar ferramentas de build (necessárias para compilar módulos nativos)
+BUILD_DEPS_OK=true
+if ! command -v gcc &>/dev/null && ! command -v clang &>/dev/null; then
+  BUILD_DEPS_OK=false
+  echo -e "${Y}⚠️  Compilador C/C++ não encontrado.${N}"
+fi
+if ! command -v make &>/dev/null; then
+  BUILD_DEPS_OK=false
+  echo -e "${Y}⚠️  make não encontrado.${N}"
+fi
+if ! command -v python3 &>/dev/null && ! command -v python &>/dev/null; then
+  BUILD_DEPS_OK=false
+  echo -e "${Y}⚠️  Python 3 não encontrado.${N}"
+fi
+
+if [ "$BUILD_DEPS_OK" = false ]; then
+  echo ""
+  echo -e "${Y}📌 Instale as ferramentas de build para garantir a compilação dos módulos nativos:${N}"
+  echo "   Arch Linux:  sudo pacman -S base-devel python"
+  echo "   Ubuntu/Debian: sudo apt install build-essential python3"
+  echo "   Fedora:      sudo dnf groupinstall 'Development Tools'"
+  echo ""
+  echo -e "${Y}⏩ A instalação vai continuar, mas se algum módulo nativo falhar,${N}"
+  echo -e "${Y}   o O.R.I.O.N vai funcionar com funcionalidades reduzidas (ex: sem syntax highlight).${N}"
+  echo ""
+fi
+echo -e "${G}✅ Dependências verificadas${N}"
 
 # ── 1. Verificar/Instalar Bun (com fallback e retry) ──
 if ! command -v bun &>/dev/null; then

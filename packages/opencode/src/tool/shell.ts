@@ -258,8 +258,11 @@ function tail(text: string, maxLines: number, maxBytes: number) {
 }
 
 const parse = Effect.fn("ShellTool.parse")(function* (command: string, ps: boolean) {
-  const tree = yield* Effect.promise(() => parser().then((p) => (ps ? p.ps : p.bash).parse(command)))
-  if (!tree) throw new Error("Failed to parse command")
+  const p = yield* Effect.promise(() => parser())
+  const lang = ps ? p.ps : p.bash
+  if (!lang) return null
+  const tree = lang.parse(command)
+  if (!tree) return null
   return tree
 })
 
@@ -315,19 +318,33 @@ const parser = lazy(async () => {
       return treePath
     },
   })
-  const { default: bashWasm } = await import("tree-sitter-bash/tree-sitter-bash.wasm" as string, {
-    with: { type: "wasm" },
-  })
-  const { default: psWasm } = await import("tree-sitter-powershell/tree-sitter-powershell.wasm" as string, {
-    with: { type: "wasm" },
-  })
-  const bashPath = resolveWasm(bashWasm)
-  const psPath = resolveWasm(psWasm)
-  const [bashLanguage, psLanguage] = await Promise.all([Language.load(bashPath), Language.load(psPath)])
-  const bash = new Parser()
-  bash.setLanguage(bashLanguage)
-  const ps = new Parser()
-  ps.setLanguage(psLanguage)
+  let bash: Parser | undefined
+  let ps: Parser | undefined
+
+  try {
+    const { default: bashWasm } = await import("tree-sitter-bash/tree-sitter-bash.wasm" as string, {
+      with: { type: "wasm" },
+    })
+    const bashPath = resolveWasm(bashWasm)
+    const bashLanguage = await Language.load(bashPath)
+    bash = new Parser()
+    bash.setLanguage(bashLanguage)
+  } catch {
+    console.warn("⚠️ tree-sitter-bash não disponível — syntax highlight bash desabilitado")
+  }
+
+  try {
+    const { default: psWasm } = await import("tree-sitter-powershell/tree-sitter-powershell.wasm" as string, {
+      with: { type: "wasm" },
+    })
+    const psPath = resolveWasm(psWasm)
+    const psLanguage = await Language.load(psPath)
+    ps = new Parser()
+    ps.setLanguage(psLanguage)
+  } catch {
+    console.warn("⚠️ tree-sitter-powershell não disponível — syntax highlight PowerShell desabilitado")
+  }
+
   return { bash, ps }
 })
 
@@ -618,16 +635,17 @@ export const ShellTool = Tool.define(
               }
               const timeout = params.timeout ?? defaultTimeoutMs
               const ps = Shell.ps(shell)
-              yield* Effect.scoped(
-                Effect.gen(function* () {
-                  const tree = yield* Effect.acquireRelease(parse(params.command, ps), (tree) =>
-                    Effect.sync(() => tree.delete()),
-                  )
-                  const scan = yield* collect(tree.rootNode, cwd, ps, shell, instanceCtx)
-                  if (!containsPath(cwd, instanceCtx)) scan.dirs.add(cwd)
-                  yield* ask(ctx, scan)
-                }),
-              )
+              const tree = yield* parse(params.command, ps)
+              if (tree) {
+                yield* Effect.scoped(
+                  Effect.gen(function* () {
+                    yield* Effect.addFinalizer(() => Effect.sync(() => tree.delete()))
+                    const scan = yield* collect(tree.rootNode, cwd, ps, shell, instanceCtx)
+                    if (!containsPath(cwd, instanceCtx)) scan.dirs.add(cwd)
+                    yield* ask(ctx, scan)
+                  }),
+                )
+              }
 
               return yield* run(
                 {
